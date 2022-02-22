@@ -26,3 +26,17 @@
 
 
 // Don't forget to add the router to the `exports` object so it can be required in other modules
+const middleware = require('../auth/auth-middleware');
+const router = require("express").Router()
+const Users = require("./users-model.js")
+
+router.get('/', middleware.restricted, async (req, res, next) => {
+  try {
+    const users = await Users.find()
+    res.status(200).send(users);
+  } catch(err) {
+    res.status(401).json("You shall not pass!")
+  }
+})
+
+module.exports = router; 
